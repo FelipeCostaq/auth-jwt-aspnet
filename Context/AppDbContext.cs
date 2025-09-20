@@ -10,5 +10,6 @@ namespace AuthFinance.Context
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<FinancialGoal> FinancialGoals { get; set; }
     }
 }

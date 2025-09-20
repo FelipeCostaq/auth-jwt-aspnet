@@ -5,7 +5,6 @@ using AuthFinance.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 
 namespace AuthFinance.Controllers
 {
