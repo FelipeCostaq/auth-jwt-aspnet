@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using AuthFinance.Context;
+using AuthFinance.DTO;
+using AuthFinance.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuthFinance.Controllers
 {
@@ -6,5 +11,30 @@ namespace AuthFinance.Controllers
     [Route("api/[controller]")]
     public class FinancialGoalController : ControllerBase
     {
+        private readonly AppDbContext _context;
+
+        public FinancialGoalController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateGoal(FinancialGoalDTO request)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var goal = new FinancialGoal
+            {
+                Title = request.Title,
+                TargetAmount = request.TargetAmount,
+                UserId = userId
+            };
+
+            _context.FinancialGoals.Add(goal);
+            await _context.SaveChangesAsync();
+
+            return Ok(goal);
+        }
     }
 }
