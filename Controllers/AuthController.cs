@@ -28,6 +28,9 @@ namespace AuthFinance.Controllers
             if (await _context.Users.AnyAsync(x => x.Username == request.Username))
                 return BadRequest("O usuário ja existe");
 
+            if(!UsernameValidator.ValidUsername(request.Username))
+                return BadRequest("Username inválido. O username deve começar com uma letra, use pelo menos 3 caracteres e apenas letras ou números.");
+
             if (!PasswordValidator.StrongPassword(request.Password))
                 return BadRequest("Senha fraca. Use letras maiúsculas, mínusculas, números e simbolos e pelo menos 8 caracteres.");
 

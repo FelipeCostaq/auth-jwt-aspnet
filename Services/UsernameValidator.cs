@@ -10,7 +10,7 @@
             if (username.Length < 3)
                 return false;
 
-            var regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z0-9]+$");
+            var regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z][a-zA-Z0-9]*$");
             return regex.IsMatch(username);
         }
     }
