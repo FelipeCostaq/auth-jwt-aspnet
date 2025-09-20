@@ -1,0 +1,6 @@
+@AuthFinance_HostAddress = http://localhost:5164
+
+GET {{AuthFinance_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
