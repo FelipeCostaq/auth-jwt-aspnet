@@ -49,7 +49,7 @@ namespace AuthFinance.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserDTO request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == request.Username && x.Password == request.Password);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == request.Username);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
                 return Unauthorized("Usuário ou senha inválidos.");
