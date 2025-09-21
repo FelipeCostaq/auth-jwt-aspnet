@@ -83,8 +83,19 @@ namespace AuthFinance.Controllers
 
             goal.CurrentAmount += amount;
 
-            if (goal.CurrentAmount > goal.TargetAmount)
-                goal.CurrentAmount = goal.TargetAmount;
+            if (goal.CurrentAmount >= goal.TargetAmount)
+            {
+                var completed = new CompletedGoal
+                {
+                    Title = goal.Title,
+                    TargetAmount = goal.TargetAmount,
+                    CompletedAt = DateTime.Now,
+                    UserId = goal.UserId
+                };
+
+                _context.CompletedGoals.Add(completed);
+                _context.FinancialGoals.Remove(goal);
+            }
 
             await _context.SaveChangesAsync();
             return Ok(goal);
