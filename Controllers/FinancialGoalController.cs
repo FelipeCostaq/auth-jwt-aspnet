@@ -66,5 +66,44 @@ namespace AuthFinance.Controllers
             await _context.SaveChangesAsync();
             return Ok(goal);
         }
+
+        [Authorize]
+        [HttpPut("{id}/add-funds")]
+        public async Task<IActionResult> AddFunds(int id, [FromBody] decimal amount)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var goal = await _context.FinancialGoals.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (goal == null)
+                return NotFound();
+
+            if (amount <= 0)
+                return BadRequest("O valor deve ser maior que zero.");
+
+            goal.CurrentAmount += amount;
+
+            if (goal.CurrentAmount > goal.TargetAmount)
+                goal.CurrentAmount = goal.TargetAmount;
+
+            await _context.SaveChangesAsync();
+            return Ok(goal);
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGoal(int id)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var goal = await _context.FinancialGoals.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (goal == null)
+                return NotFound();
+
+            _context.FinancialGoals.Remove(goal);
+            await _context.SaveChangesAsync();
+            return Ok($"Meta {goal.Title} deletada!");
+        }
     }
 }
