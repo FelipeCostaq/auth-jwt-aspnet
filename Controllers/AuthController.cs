@@ -54,7 +54,7 @@ namespace AuthFinance.Controllers
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
                 return Unauthorized("Usuário ou senha inválidos.");
 
-            var token = _tokenService.GenerateToken(user.Username);
+            var token = _tokenService.GenerateToken(user);
             return Ok(new { token });
         }
 

@@ -4,6 +4,7 @@ using AuthFinance.DTO;
 using AuthFinance.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthFinance.Controllers
 {
@@ -35,6 +36,17 @@ namespace AuthFinance.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(goal);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetGoals()
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var goals = await _context.FinancialGoals.Where(x => x.UserId == userId).ToListAsync();
+
+            return Ok(goals);
         }
     }
 }
