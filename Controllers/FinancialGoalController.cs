@@ -48,5 +48,23 @@ namespace AuthFinance.Controllers
 
             return Ok(goals);
         }
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateGoal(int id, FinancialGoalDTO request)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var goal = await _context.FinancialGoals.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (goal == null)
+                return NotFound();
+
+            goal.Title = request.Title;
+            goal.TargetAmount = request.TargetAmount;
+
+            await _context.SaveChangesAsync();
+            return Ok(goal);
+        }
     }
 }
