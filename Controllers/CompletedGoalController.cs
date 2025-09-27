@@ -28,5 +28,35 @@ namespace AuthFinance.Controllers
             return Ok(completedGoals);
         }
 
+        [Authorize]
+        [HttpGet("{title}")]
+        public async Task<IActionResult> GetCompletedGoalByTitle(string title)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var completedGoals = await _context.CompletedGoals.Where(x => x.UserId == userId && x.Title.Contains(title)).ToListAsync();
+
+            if (completedGoals.Count == 0)
+                return NotFound();
+
+            return Ok(completedGoals);
+        }
+
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCompletedGoal(int id)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var completedGoal = await _context.CompletedGoals.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+
+            if (completedGoal == null)
+                return NotFound();
+
+            _context.CompletedGoals.Remove(completedGoal);
+           await  _context.SaveChangesAsync();
+            return Ok(completedGoal);
+        }
     }
 }
