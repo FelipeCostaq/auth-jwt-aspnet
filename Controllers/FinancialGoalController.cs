@@ -49,6 +49,8 @@ namespace AuthFinance.Controllers
             return Ok(goals);
         }
 
+        
+
         [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGoal(int id, FinancialGoalDTO request)
