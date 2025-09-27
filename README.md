@@ -38,7 +38,7 @@ API para gerenciamento de metas financeiras, podendo gerenciar metas a serem bat
 # Endpoints
 
 ## Auth
-<p>🔑 - Esta api utiliza autenticação!</p>
+<h3>🔑 - Esta api utiliza autenticação!</h3>
 
 - **POST** `/api/Auth/register` – Registra um usuário.
 - **POST** `/api/Auth/login` – Faz login em um usuário e retorna um token para utilização dos outros endpoints.
