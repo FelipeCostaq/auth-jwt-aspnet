@@ -49,7 +49,19 @@ namespace AuthFinance.Controllers
             return Ok(goals);
         }
 
-        
+        [Authorize]
+        [HttpGet("{title}")]
+        public async Task<IActionResult> GetGoalByTitle(string title)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var goals = await _context.FinancialGoals.Where(x => x.UserId == userId && x.Title.Contains(title)).ToListAsync();
+
+            if(goals.Count == 0)
+                return NotFound();
+
+            return Ok(goals);
+        }
 
         [Authorize]
         [HttpPut("{id}")]
